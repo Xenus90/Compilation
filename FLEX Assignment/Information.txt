@@ -1,0 +1,16 @@
+Students ids:
+1. 203771621
+2. 321924466
+
+Students names:
+1. Notkin Daniel
+2. Greenberg Vladimir
+
+Operating system:
+Windows 10 - 64Bit
+
+Development enviroment:
+Visual Studio 2015
+
+Note:
+The executable file is in Debug folder.

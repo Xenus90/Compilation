@@ -1,0 +1,119 @@
+%{
+#include "Token.h"
+#include "Parser.h"
+
+int numOfLine = 1;
+%}
+
+WHITE_SPACE					[ \t]
+PLUS_OPERATION				"+"
+MINUS_OPERATION				"-"
+MULTIPLICATION_OPERATION	"*"
+DIVISION_OPERATION			"/"
+POWER_OPERATION				"**"
+INCREMENT_OPERATION			"++"
+GREATER_THAN				">"
+LESSER_THAN					"<"
+GREATER_EQUALS_THAN			">="
+LESSER_EQUALS_THAN			"<="
+EQUALS						"=="
+NOT_EQUALS					"!="
+ASSIGNMENT_SIGN				"="
+POINTER						"^"
+ADDRESS_OF					"&"
+LETTER						[a-zA-Z]
+DIGIT						[0-9]
+COMMA						","
+SEMICOLON					";"
+COLON						":"
+PARENTHESES_OPEN			"("
+PARENTHESES_CLOSE			")"
+BRACKETS_OPEN				"["
+BRACKETS_CLOSE				"]"
+COMMENT_START				"--"
+COMMENT_END					"\n"
+KEYWORDS					"begin"|"end"|"block"|"type"|"is"|"of"|"do"|"default"|"when"|"end_when"|"for"|"end_for"|"malloc"|"size_of"|"free"|"integer"|"real"|"array"
+TOKENS						"+"|"-"|"*"|"/"|"**"|"++"|">"|"<"|">="|"<="|"=="|"!="|"="|"^"|"&"|[a-zA-Z]|[0-9]|"_"|","|";"|":"|"("|")"|"["|"]"|"--"|"\n"|" "|"\t"
+
+%%
+	
+{COMMENT_START}.*{COMMENT_END} 	{ numOfLine++; }
+{COMMENT_START}.*				{ numOfLine++; }
+"\n"							{ numOfLine++; }
+{WHITE_SPACE}					{  }
+{DIGIT}+						{ if (yyleng <= 10 && yytext[0] >= 0)
+									{
+										fprintf(yyout, "\nToken of kind: '{TOKEN_UNSIGNED_INTEGER}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext);
+										create_and_store_token(20, yytext, numOfLine);
+									}
+								else
+									{
+										fprintf(yyout, "\nThe character '%s' at line: %d does not begin any legal token in the language!", yytext, numOfLine); 
+									}
+								}
+{DIGIT}+"."{DIGIT}+				{ fprintf(yyout, "\nToken of kind: '{TOKEN_REAL}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(21, yytext, numOfLine); }
+{PLUS_OPERATION}				{ fprintf(yyout, "\nToken of kind: '{TOKEN_PLUS_OPERATION}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(22, "+", numOfLine); }
+{MINUS_OPERATION}				{ fprintf(yyout, "\nToken of kind: '{TOKEN_MINUS_OPERATION}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(23, "-", numOfLine); }
+{MULTIPLICATION_OPERATION}		{ fprintf(yyout, "\nToken of kind: '{TOKEN_MULTIPLICATION_OPERATION}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(24, "*", numOfLine); }
+{DIVISION_OPERATION}			{ fprintf(yyout, "\nToken of kind: '{TOKEN_DIVISION_OPERATION}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(25, "/", numOfLine); }
+{POWER_OPERATION}				{ fprintf(yyout, "\nToken of kind: '{TOKEN_POWER_OPERATION}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(26, "**", numOfLine); }
+{INCREMENT_OPERATION}			{ fprintf(yyout, "\nToken of kind: '{TOKEN_INCREMENT_OPERATION}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(27, "++", numOfLine); }
+{GREATER_THAN}					{ fprintf(yyout, "\nToken of kind: '{TOKEN_GREATER_THAN}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(28, ">", numOfLine); }
+{LESSER_THAN}					{ fprintf(yyout, "\nToken of kind: '{TOKEN_LESSER_THAN}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(29, "<", numOfLine); }
+{GREATER_EQUALS_THAN}			{ fprintf(yyout, "\nToken of kind: '{TOKEN_GREATER_EQUALS_THAN}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(30, ">=", numOfLine); }
+{LESSER_EQUALS_THAN}			{ fprintf(yyout, "\nToken of kind: '{TOKEN_LESSER_EQUALS_THAN}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(31, "<=", numOfLine); }
+{EQUALS}						{ fprintf(yyout, "\nToken of kind: '{TOKEN_EQUALS}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(32, "==", numOfLine); }
+{NOT_EQUALS}					{ fprintf(yyout, "\nToken of kind: '{TOKEN_NOT_EQUALS}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(33, "!=", numOfLine); }
+{ASSIGNMENT_SIGN}				{ fprintf(yyout, "\nToken of kind: '{TOKEN_ASSIGNMENT_SIGN}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(34, "=", numOfLine); }
+{POINTER}						{ fprintf(yyout, "\nToken of kind: '{TOKEN_POINTER}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(35, "^", numOfLine); }
+{ADDRESS_OF}					{ fprintf(yyout, "\nToken of kind: '{TOKEN_ADDRESS_OF}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(36, "&", numOfLine); }
+{COMMA}							{ fprintf(yyout, "\nToken of kind: '{TOKEN_COMMA}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(37, ",", numOfLine); }
+{SEMICOLON}						{ fprintf(yyout, "\nToken of kind: '{TOKEN_SEMICOLON}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(38, ";", numOfLine); }
+{COLON}							{ fprintf(yyout, "\nToken of kind: '{TOKEN_COLON}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(39, ":", numOfLine); }
+{PARENTHESES_OPEN}				{ fprintf(yyout, "\nToken of kind: '{TOKEN_PARENTHESES_OPEN}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(40, "(", numOfLine); }
+{PARENTHESES_CLOSE}				{ fprintf(yyout, "\nToken of kind: '{TOKEN_PARENTHESES_CLOSE}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(41, ")", numOfLine); }						
+{BRACKETS_OPEN}					{ fprintf(yyout, "\nToken of kind: '{TOKEN_BRACKETS_OPEN}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(42, "[", numOfLine); }	
+{BRACKETS_CLOSE}				{ fprintf(yyout, "\nToken of kind: '{TOKEN_BRACKETS_CLOSE}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(43, "]", numOfLine); }
+"begin"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_BEGIN}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(1, "begin", numOfLine); }
+"block"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_BLOCK}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(3, "block", numOfLine); }
+"type"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_TYPE}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(4, "type", numOfLine); }
+"is"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_IS}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(5, "is", numOfLine); }
+"of"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_OF}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(6, "of", numOfLine); }
+"do"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_DO}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(7, "do", numOfLine); }
+"default"						{ fprintf(yyout, "\nToken of kind: '{KEYWORD_DEFAULT}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(8, "default", numOfLine); }
+"when"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_WHEN}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(9, "when", numOfLine); }
+"end_when"						{ fprintf(yyout, "\nToken of kind: '{KEYWORD_END_WHEN}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(10, "end_when", numOfLine); }
+"for"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_FOR}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(11, "for", numOfLine); }
+"end_for"						{ fprintf(yyout, "\nToken of kind: '{KEYWORD_END_FOR}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(12, "end_for", numOfLine); }
+"malloc"						{ fprintf(yyout, "\nToken of kind: '{KEYWORD_MALLOC}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(13, "malloc", numOfLine); }
+"size_of"						{ fprintf(yyout, "\nToken of kind: '{KEYWORD_SIZE_OF}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(14, "size_of", numOfLine); }
+"array"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_ARRAY}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(15, "array", numOfLine); }
+"free"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_FREE}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(16, "free", numOfLine); }
+"end"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_END}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(2, "end", numOfLine); }
+"integer"						{ fprintf(yyout, "\nToken of kind: '{KEYWORD_UNSIGNED_INTEGER}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(17, "integer", numOfLine); }
+"real"							{ fprintf(yyout, "\nToken of kind: '{KEYWORD_REAL}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(18, "real", numOfLine); }
+{LETTER}(_?({LETTER}|{DIGIT}))*	{ fprintf(yyout, "\nToken of kind: '{TOKEN_ID}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(19, yytext, numOfLine); }
+<<EOF>>                         { fprintf(yyout, "\nToken of kind: '{TOKEN_EOF}' was found at line: {%d}, lexeme: '{%s}'", numOfLine, yytext); create_and_store_token(44, "EOF", numOfLine); yyterminate(); }
+[^{TOKENS}{KEYWORDS}]			{ fprintf(yyout, "\nThe character '{%s}' at line: {%d} does not begin any legal token in the language!", yytext, numOfLine); }
+
+%%
+
+void main(int argc, char* argv[])
+{
+	yyin = fopen("c:\\temp\\test1.txt", "r");
+	yyout = fopen("c:\\temp\\test1_203771621_321924466_lex.txt", "w");
+	yylex();
+	yyout = fopen("c:\\temp\\test1_203771621_321924466_syntactic.txt", "w");
+	parser();
+	free_memory();
+	
+	yyrestart();
+	numOfLine = 1;
+	
+	yyin = fopen("c:\\temp\\test2.txt", "r");
+	yyout = fopen("c:\\temp\\test2_203771621_321924466_lex.txt", "w");	
+	yylex();
+	yyout = fopen("c:\\temp\\test2_203771621_321924466_syntactic.txt", "w");
+	parser();
+	free_memory();
+}
